@@ -2,11 +2,14 @@ package com.apple.mySpringHome.controller;
 
 import com.apple.mySpringHome.model.Board;
 import com.apple.mySpringHome.repository.BoardRepository;
+import com.apple.mySpringHome.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -15,6 +18,9 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardValidator boardValidator;
 
     @GetMapping("/list")
     public String list(Model model) {  // 게시판을 호출할 때 데이터 값을 넘겨주고 싶다.. 파라미터로 Model을 가져온다.
@@ -46,7 +52,12 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String postForm(@ModelAttribute Board board) {
+    public String postForm(@Valid Board board, BindingResult bindingResult) {
+
+        boardValidator.validate(board, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "board/form";
+        }
         boardRepository.save(board);
         return "redirect:/board/list";
         // redirect를 해야 list에 대한 내용으로 다시 값이 뿌려지는 쿼리가 실행된다

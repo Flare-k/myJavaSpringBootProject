@@ -5,10 +5,7 @@ import com.apple.mySpringHome.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,9 +31,17 @@ public class BoardController {
     }
     
     @GetMapping("/form")
-    public String getForm(Model model) {
-        model.addAttribute("board", new Board());   // thymeleaf로 board 키를 사용해 내용을 저장해놓을 것
-        // board를 작성하여 Post할 것이기 때문에 new Board()를 미리 생성해준다.
+    public String getForm(Model model, @RequestParam(required = false) Long id) {   //@RequestParam(required = false) -> 새글작성의 form인 경우 이 파라미터가 필요하지 않다. 글 수정할 때 필요하다.
+
+        if (id == null) {
+            // id가 null인 경우.. 즉, 새 글작성의 form인 경우
+            model.addAttribute("board", new Board());   // thymeleaf로 board 키를 사용해 내용을 저장해놓을 것
+            // board를 작성하여 Post할 것이기 때문에 new Board()를 미리 생성해준다.
+        }
+        else {
+            Board board = boardRepository.findById(id).orElse(null);    // 만약 값이 없으면 null로..
+            model.addAttribute("board", board);
+        }
         return "board/form";
     }
 

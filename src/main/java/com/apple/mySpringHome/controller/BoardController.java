@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -32,8 +34,16 @@ public class BoardController {
     }
     
     @GetMapping("/form")
-    public String form(Model model) {
-        model.addAttribute("board", new Board());
+    public String getForm(Model model) {
+        model.addAttribute("board", new Board());   // thymeleaf로 board 키를 사용해 내용을 저장해놓을 것
+        // board를 작성하여 Post할 것이기 때문에 new Board()를 미리 생성해준다.
         return "board/form";
+    }
+
+    @PostMapping("/form")
+    public String postForm(@ModelAttribute Board board) {
+        boardRepository.save(board);
+        return "redirect:/board/list";
+        // redirect를 해야 list에 대한 내용으로 다시 값이 뿌려지는 쿼리가 실행된다
     }
 }

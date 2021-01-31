@@ -38,7 +38,7 @@ public class BoardController {
     
     @GetMapping("/form")
     public String getForm(Model model, @RequestParam(required = false) Long id) {   //@RequestParam(required = false) -> 새글작성의 form인 경우 이 파라미터가 필요하지 않다. 글 수정할 때 필요하다.
-
+        // @RequestParam은 URL이 아닌 Thymeleaf에서 전달할 때 쓰인다.
         if (id == null) {
             // id가 null인 경우.. 즉, 새 글작성의 form인 경우
             model.addAttribute("board", new Board());   // thymeleaf로 board 키를 사용해 내용을 저장해놓을 것

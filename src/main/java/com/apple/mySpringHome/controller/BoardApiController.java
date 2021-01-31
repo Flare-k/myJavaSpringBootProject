@@ -5,6 +5,7 @@ import com.apple.mySpringHome.model.Board;
 import com.apple.mySpringHome.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
@@ -16,8 +17,13 @@ public class BoardApiController {
     private BoardRepository boardRepository;
 
     @GetMapping("/boards")
-    List<Board> all() {
-        return boardRepository.findAll();
+    List<Board> all(@RequestParam(required = false) String title) { // @RequestParam은 URL이 아닌 Thymeleaf에서 전달할 때 쓰인다.
+        if (StringUtils.isEmpty(title)) {
+            return boardRepository.findAll();
+        }
+        else {
+            return boardRepository.findByTitle(title);
+        }
     }
 
     @PostMapping("/boards")

@@ -31,13 +31,21 @@
         </table>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                <!-- Previous -->
+                <li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disabled'">
+                    <!-- 1 페이지라서 boards.pageable.pageNumber - 1 부분에서 오류가 날거라 생각될 수 있지만 이미 li에서 disabled 되기에 상관없음-->
+                    <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber - 1})}" tabindex="-1" aria-disabled="true">
+                        Previous
+                    </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <!-- Thyleaf Loop 돌리기 thyleaf number loop.. #numbers utility 사용 -->
+                <li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" href="#" th:href="@{/board/list(page=${i - 1})}" th:text="${i}">1</a>
+                </li>
+                <!-- Next -->
+                <li class="page-item" th:classappend="${boards.totalPages == boards.pageable.pageNumber + 1} ? 'disabled'">
+                    <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber + 1})}">Next</a>
+                </li>
             </ul>
         </nav>
     </div>

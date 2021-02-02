@@ -27,14 +27,14 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 2) Pageable pageable) {  // 게시판을 호출할 때 데이터 값을 넘겨주고 싶다.. 파라미터로 Model을 가져온다.
+    public String list(Model model, @PageableDefault(size = 2) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {  // 게시판을 호출할 때 데이터 값을 넘겨주고 싶다.. 파라미터로 Model을 가져온다.
         /**
          *  model에 원하는 값을 넘겨준다.
          *  Board Repo를 이용하여 테이블 내에 있는 값을 가져온다.
          *  그러기 위해서 boardRepository 객체 생성
          */
         // List<Board> boards = boardRepository.findAll(); // Board Repo에서 값을 가져와 boards에 할당
-        Page<Board> boards = boardRepository.findAll(pageable);    // 페이지 단위로 데이터 가져오기
+        Page<Board> boards = boardRepository.findByTitleOrContentContaining(searchText, searchText, pageable);    // 페이지 단위로 데이터 가져오기
         // 기존에 List<Board>를 사용했을 때는 데이터 전제 건수를 알기 쉬웠지만 Page에선 Page를 한단위로 보기 때문에 따로 메소드를 사용해야 한다.
         // boards.getTotalElements(); 이걸 타임리프에서 사용하면 된다.
         int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);

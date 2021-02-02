@@ -4,6 +4,8 @@ import com.apple.mySpringHome.model.Board;
 import com.apple.mySpringHome.repository.BoardRepository;
 import com.apple.mySpringHome.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +31,10 @@ public class BoardController {
          *  Board Repo를 이용하여 테이블 내에 있는 값을 가져온다.
          *  그러기 위해서 boardRepository 객체 생성
          */
-        List<Board> boards = boardRepository.findAll(); // Board Repo에서 값을 가져와 boards에 할당
+        // List<Board> boards = boardRepository.findAll(); // Board Repo에서 값을 가져와 boards에 할당
+        Page<Board> boards = boardRepository.findAll(PageRequest.of(0, 20));    // 페이지 단위로 데이터 가져오기
+        // 기존에 List<Board>를 사용했을 때는 데이터 전제 건수를 알기 쉬웠지만 Page에선 Page를 한단위로 보기 때문에 따로 메소드를 사용해야 한다.
+        // boards.getTotalElements(); 이걸 타임리프에서 사용하면 된다.
         model.addAttribute("boards", boards);   //키, 밸류
         // model에 담긴 데이터들은 thymeleaf에서 사용할 수 있게된다.
 

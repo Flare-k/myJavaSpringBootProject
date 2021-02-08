@@ -1,5 +1,6 @@
 package com.apple.mySpringHome.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Board {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="USER_ID")    // name은 Board에 있는 컬럼명, referencedColumnName는 매핑되는 User 테이블의 컬럼
+    @JoinColumn(name="user_id")    // name은 Board에 있는 컬럼명, referencedColumnName는 매핑되는 User 테이블의 컬럼
     private User user;
 }
 

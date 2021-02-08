@@ -1,6 +1,6 @@
 package com.apple.mySpringHome.controller;
 
-
+import com.apple.mySpringHome.model.Board;
 import com.apple.mySpringHome.model.User;
 import com.apple.mySpringHome.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,17 @@ public class UserApiController {
 
     @PutMapping("/users/{id}")
     User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
+
         return userRepository.findById(id)
                 .map(user -> {
 //                    user.setTitle(newUser.getTitle());
 //                    user.setContent(newUser.getContent());
+//                    user.setBoards(newUser.getBoards());
+                    user.getBoards().clear();
+                    user.getBoards().addAll(newUser.getBoards());
+                    for(Board board : user.getBoards()) {
+                        board.setUser(user);
+                    }
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> {

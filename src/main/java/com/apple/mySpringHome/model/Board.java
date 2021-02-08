@@ -22,6 +22,10 @@ public class Board {
     @Size(min=2, max=30, message = "제목은 2자 이상, 30자 이하입니다.")
     private String title;
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name="USER_ID")    // name은 Board에 있는 컬럼명, referencedColumnName는 매핑되는 User 테이블의 컬럼
+    private User user;
 }
 
 

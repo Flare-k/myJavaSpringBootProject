@@ -26,6 +26,7 @@ public class Board {
 
     @ManyToOne
     @JoinColumn(name="user_id")    // name은 Board에 있는 컬럼명, referencedColumnName는 매핑되는 User 테이블의 컬럼
+    @JsonIgnore
     private User user;
 }
 

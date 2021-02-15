@@ -18,7 +18,10 @@ public class UserApiController {
 
     @GetMapping("/users")
     List<User> all() {
-        return userRepository.findAll();
+        // return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        users.get(0).getBoards().size();
+        return users;
     }
 
     @PostMapping("/users")

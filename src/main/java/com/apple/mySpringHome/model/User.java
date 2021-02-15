@@ -19,6 +19,7 @@ public class User {
     private Boolean enabled;
 
     // Many-to-Many Mapping
+    @JsonIgnore
     @ManyToMany
     @JoinTable( // 내가 만든 조인 테이블
             name = "user_role",
@@ -29,10 +30,21 @@ public class User {
     //User Repo를 이용해서 조회하게 되면 User에 해당하는 권한이 알아서 조회가 되서 roles에 담기게 된다.
 
     // User 입장에서 Board는 OneToMany 관계이다.
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)   // Board에서는 JoinColumn을 사용했는데 여기서는 Board에서 User를 생성한 변수명 'user'를 mappedBy로 불러온다. 이렇게 되면 서로 조회하는 양방향 Mapping이 된다.
+    // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)   // Board에서는 JoinColumn을 사용했는데 여기서는 Board에서 User를 생성한 변수명 'user'를 mappedBy로 불러온다. 이렇게 되면 서로 조회하는 양방향 Mapping이 된다.
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)   // fetch? User 조회 시 Board를 같이 가져올 것인가. EAGER: 같이 가져옴, LAZY: Board를 사용할 때 조
     @JsonIgnore
     private List<Board> boards = new ArrayList<>();
     /**
      * 보통 양방향 Mapping 할 때, ManyToOne에서 JoinColumn을 작성하고.. OneToMany에서는  mappedBy 키워드를 이용한다.
+     */
+
+    /**
+     * EAGER
+     * - OneToOne
+     * - ManyToOne
+     *
+     * LAZY
+     * - OneToMany
+     * - ManyToMany
      */
 }
